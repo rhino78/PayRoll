@@ -75,11 +75,34 @@ class MedArts(Qt.QMainWindow):
 class PayrollForm(Qt.QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.ui = loadUi("PayRollFrm.ui", self)  # load the ui as html
+        self.ui = loadUi("PayrollFrm.ui", self)  # load the ui as html
         self.closeButton.clicked.connect(self.close)
         self.saveButton.clicked.connect(self.save_to_db)
+        self.prevButton.clicked.connect(self.prev)
+        self.nextButton.clicked.connect(self.next)
         self.comboBox.currentIndexChanged.connect(self.on_combo_change)
         self.init_combo()
+
+    def prev(self):
+        print('previous')
+        active_rec =- 1
+        print(active_rec)
+
+
+    def next(self):
+        print('next')
+        # working ok, but won't increment multiple times
+        active_rec =+ 1
+        print(active_rec)
+        pay = DatabaseHelpers.selectemp(active_emp_id)
+        if len(pay) > 0:
+            self.date.setText(pay[active_rec][0])
+            self.hours.setText(str(pay[active_rec][1]))
+            self.gross.setText(str(pay[active_rec][2]))
+            self.withholding.setText(str(pay[active_rec][3]))
+            self.socialsecurity.setText(str(pay[active_rec][4]))
+            self.ira.setText(str(pay[active_rec][5]))
+            self.notes.setText(str(pay[active_rec][6]))
 
     def save_to_db(self):
         DatabaseHelpers.insert_emp(self)
@@ -94,8 +117,8 @@ class PayrollForm(Qt.QMainWindow):
         # we can use the value as an index
         global active_emp_id
         active_emp_id = value
-        print(active_emp_id)
-
+        global active_rec
+        active_rec = 0
         self.date.clear()
         self.hours.clear()
         self.gross.clear()
@@ -105,15 +128,16 @@ class PayrollForm(Qt.QMainWindow):
         self.notes.clear()
 
         pay = DatabaseHelpers.selectemp(active_emp_id)
+        self.label_8.setText("there are {0} records to display".format(len(pay)))
         # hardcoding to the first row - still need to implement the paging feature
         if len(pay) > 0:
-            self.date.setText(pay[0][0])
-            self.hours.setText(str(pay[0][1]))
-            self.gross.setText(str(pay[0][2]))
-            self.withholding.setText(str(pay[0][3]))
-            self.socialsecurity.setText(str(pay[0][4]))
-            self.ira.setText(str(pay[0][5]))
-            self.notes.setText(str(pay[0][6]))
+            self.date.setText(pay[active_rec][0])
+            self.hours.setText(str(pay[active_rec][1]))
+            self.gross.setText(str(pay[active_rec][2]))
+            self.withholding.setText(str(pay[active_rec][3]))
+            self.socialsecurity.setText(str(pay[active_rec][4]))
+            self.ira.setText(str(pay[active_rec][5]))
+            self.notes.setText(str(pay[active_rec][6]))
 
 
 class CreateForm(Qt.QMainWindow):

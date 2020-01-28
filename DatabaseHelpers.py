@@ -91,17 +91,17 @@ def init_database():
         c = conn.cursor()
         c.execute(
             '''create table employees (
-            [Emp_ID] integer PRIMARY KEY, 
-            [First_Name] text NOT NULL, 
-            [Last_Name] text NOT NULL, 
-            [Address] text NOT NULL, 
+            [Emp_ID] integer PRIMARY KEY,
+            [First_Name] text NOT NULL,
+            [Last_Name] text NOT NULL,
+            [Address] text NOT NULL,
             [Phone_Number] text NOT NULL);''')
 
         c.execute(
             '''create table payroll (
             [Pay_ID] integer PRIMARY_KEY,
-            [Emp_ID] integer NOT NULL, 
-            [Date] date, 
+            [Emp_ID] integer NOT NULL,
+            [Date] date,
             [Hours] integer,
             [Gross] integer,
             [Withholding] integer,
